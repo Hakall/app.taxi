@@ -1,6 +1,19 @@
 extends layout
 
 block content
-	ul
-		each val in data
-			li=JSON.stringify(val)
+	.container
+		.row
+			each val in data
+				.col.s12.m5
+					.card-panel.teal
+						span.white-text
+							| #{val.vehicle.constructor}
+							| #{val.vehicle.model}
+							| #{val.status}
+							| #{val.crowfly_distance}
+						a.waves-effect.waves-light.btn(href='/hails/#{val.id}') Interpeler
+
+
+	//- ul
+		
+	//- 		li=JSON.stringify(val)
