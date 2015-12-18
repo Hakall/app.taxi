@@ -3,16 +3,56 @@ extends layout
 block content
 	.container
 		.row
+			#map
+		.row
 			each val in data
-				.col.s12.m5
+				.col.s6.m4
 					.card-panel.teal
 						span.white-text
 							| #{val.vehicle.constructor}
 							| #{val.vehicle.model}
 							| #{val.status}
 							| #{val.crowfly_distance}
+						a.waves-effect.waves-light.btn(onclick='getTaxiPos(#{val.position.lat}, #{val.position.lon});') Positionner
 						a.waves-effect.waves-light.btn(href='/hails/#{val.id}') Interpeler
-
+	script(type='text/javascript').
+		var posLat=0;
+		var posLon=0;
+		function getLocation() {
+		if (navigator.geolocation) {
+		navigator.geolocation.watchPosition(setPosition);
+		} else {
+		alert("Geolocation is not supported by this browser.");
+		}
+		}
+		function setPosition(position) {
+		posLat=position.coords.latitude;
+		posLon=position.coords.longitude;
+		}
+		getLocation();
+		function getTaxiPos(lat, lon){
+		map.removeLayer(circle)
+		circle = new L.circle([lat, lon], 25, {
+		color: 'yellow',
+		fillColor: '#f03',
+		fillOpacity: 0.35
+		});
+		map.addLayer(circle);
+		//- alert(lat+','+lon);
+		};
+		var map = L.map('map').setView([48.8534100, 2.3488000], 14);
+		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		maxZoom: 22,
+		id: 'mapbox.satellite',
+		accessToken: 'pk.eyJ1IjoiaGFrYWxsIiwiYSI6ImNpaTdnZGk0ZjAwOHJ2eW0zZTgwYmNwN3EifQ.Z92XzmwZ3GmmuQavX6pB0g'
+		}).addTo(map);
+		var marker = L.marker([48.8534100, 2.3488000]).addTo(map);
+		var circle = new L.circle([48.8534100, 2.3488000], 15, {
+		color: 'red',
+		fillColor: '#f03',
+		fillOpacity: 0.35
+		});
 
 	//- ul
 		

@@ -32,6 +32,7 @@ router.get('/taxis', function(req, res, next) {
     }, function(error, response, body) {
         //a faire si besoin de parser plus finement
         /*services.le_taxi_parser.parse(resultats);*/
+        /*console.log(body);*/
         res.render('results', JSON.parse(body));
     });
 
@@ -39,6 +40,7 @@ router.get('/taxis', function(req, res, next) {
 
 router.get('/hails/:idTaxi', function(req, res, next) {
     console.log(req.params.idTaxi);
+    res.render('hails', {taxi:req.params.idTaxi});
     var resultat;
     request({
         uri: "https://dev.api.taxi/hails/",
@@ -62,11 +64,12 @@ router.get('/hails/:idTaxi', function(req, res, next) {
             }
         }
     }, function(error, response, body) {
-        //a faire si besoin de parser plus finement
-        /*services.le_taxi_parser.parse(resultat);*/
+        //l'api sur la route /hails ne fonctionne pas du coup on renvoie autre chose
         console.log(body);
-        /*res.render('results', JSON.parse(body));*/
+        //api hail ne fonctionne pas, donc on simule un résultat
+        //*res.render('hails', {taxi:req.params.idTaxi});
     });
+    
 });
 
 module.exports = router;
